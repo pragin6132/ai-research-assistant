@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI Research Assistant</title>
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Primary navigation">
+      <p class="brand">AI Research Assistant<span class="brand-dot">.</span></p>
+      <p class="brand-note">Research deeper.<br>See further.</p>
+      <nav class="nav">
+        <button type="button" class="active"><span class="nav-icon">⌂</span>Home</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <button id="settings-btn" type="button" class="nav"><span class="nav-icon">⚙</span>Settings</button>
+      </div>
+    </aside>
+
+    <div class="workspace">
+      <div class="topbar">
+        <button class="top-icon" type="button" id="top-theme-btn" aria-label="Toggle theme">☼</button>
+      </div>
+
+      <main>
+        <section class="hero">
+          <h1>How can I help with your<br>research today?</h1>
+          <div class="hero-accent"></div>
+          <p>Ask a question. Get in-depth research. Turn information into insights.</p>
+        </section>
+
+        <section class="composer" aria-label="Research composer">
+          <div class="composer-box">
+            <textarea id="prompt-input" placeholder="Ask your research question here..." rows="3"></textarea>
+            <div class="composer-footer">
+              <div class="composer-left">
+                <div class="speech-control">
+                  <button id="mic-btn" class="icon-btn speak-btn" type="button" title="Choose a speech input language" aria-label="Speak" aria-haspopup="true" aria-expanded="false">
+                    <span id="mic-btn-label">Speak</span>
+                  </button>
+                  <div class="speech-lang-menu" id="speech-lang-select" aria-label="Speech input language">
+                    <span class="speech-lang-label">Speak in</span>
+                    <button type="button" class="pill-btn active" data-lang="en-US">English</button>
+                    <button type="button" class="pill-btn" data-lang="ta-IN">Tamil</button>
+                  </div>
+                </div>
+              </div>
+              <div class="composer-right">
+                <div class="model-menu" id="model-select" aria-label="Model">
+                  <button type="button" class="pill-btn active" data-provider="gemini">Gemini</button>
+                  <button type="button" class="pill-btn" data-provider="nvidia">NVIDIA</button>
+                  <button type="button" class="pill-btn" data-provider="groq">Groq</button>
+                </div>
+                <button id="send-btn" class="send-btn" type="button">Send</button>
+              </div>
+            </div>
+          </div>
+          <p class="error-text" id="error-text"></p>
+        </section>
+
+        <section id="progress-section" class="pipeline-wrap">
+          <p class="progress-caption" id="progress-caption">Ready to research</p>
+          <div class="pipeline" id="pipeline">
+            <div class="pipeline-stage" data-stage="plan"><div class="stage-dot">1</div><div class="stage-label">Plan</div></div>
+            <div class="pipeline-stage" data-stage="search"><div class="stage-dot">2</div><div class="stage-label">Search</div></div>
+            <div class="pipeline-stage" data-stage="review"><div class="stage-dot">3</div><div class="stage-label">Review</div></div>
+            <div class="pipeline-stage" data-stage="synthesize"><div class="stage-dot">4</div><div class="stage-label">Synthesize</div></div>
+            <div class="pipeline-stage" data-stage="validate"><div class="stage-dot">5</div><div class="stage-label">Validate</div></div>
+            <div class="pipeline-stage" data-stage="report"><div class="stage-dot">6</div><div class="stage-label">Report</div></div>
+          </div>
+          <ul class="progress-list" id="progress-list"></ul>
+          <div class="status-line">
+            <strong id="status-title">Ready to research</strong>
+            <span id="status-detail">Enter your question and click Send to begin.</span>
+          </div>
+        </section>
+
+        <section class="feature-row" aria-label="AI Research Assistant features">
+          <div class="feature"><p class="feature-title">In-depth research</p><p class="feature-text">Multiple targeted sources for deeper coverage.</p></div>
+          <div class="feature"><p class="feature-title">Reliable insights</p><p class="feature-text">Structured findings built from researched evidence.</p></div>
+          <div class="feature"><p class="feature-title">Clear citations</p><p class="feature-text">Traceable sources for every researched topic.</p></div>
+          <div class="feature"><p class="feature-title">Actionable knowledge</p><p class="feature-text">Turn information into clear, useful understanding.</p></div>
+        </section>
+
+        <div id="report-divider" style="display:none;" class="report-divider"></div>
+        <section id="report-section">
+          <div class="report-header">
+            <h1 class="report-title" id="report-title"></h1>
+            <button id="copy-report-btn" class="copy-report-btn" type="button">Copy</button>
+          </div>
+          <p class="report-summary" id="report-summary"></p>
+          <h3 class="section-label">Key findings</h3>
+          <ul class="key-findings" id="key-findings"></ul>
+          <div id="findings-container"></div>
+          <h3 class="section-label">Sources</h3>
+          <ol class="sources-list" id="sources-list"></ol>
+        </section>
+      </main>
+    </div>
+  </div>
+  <div id="settings-overlay">
+    <div class="settings-panel">
+      <h2>Settings</h2>
+      <p class="settings-note">
+        API key toggles and any key you enter here are stored only in this
+        browser (localStorage). When a provider's toggle is On, requests use
+        the app's own configured key for it. When Off, your key below is
+        sent with your request only — never stored on the server, never
+        shown outside this password field.
+      </p>
+
+      <div class="settings-group">
+        <h3>API keys</h3>
+
+        <div class="provider-key-row" data-provider="gemini">
+          <div class="model-row provider-key-toggle-row">
+            <span class="model-label">Gemini — Inbuilt API Key</span>
+            <div class="model-select inbuilt-toggle" data-provider="gemini">
+              <button type="button" data-value="on" class="active">On</button>
+              <button type="button" data-value="off">Off</button>
+            </div>
+          </div>
+          <div class="custom-key-field" data-provider="gemini">
+            <label for="key-gemini">Your API Key</label>
+            <div class="custom-key-input-row">
+              <input type="password" id="key-gemini" autocomplete="off" placeholder="Paste your Gemini API key" />
+              <button type="button" class="save-key-btn" data-provider="gemini">Save</button>
+            </div>
+            <p class="save-confirm" id="save-confirm-gemini"></p>
+          </div>
+        </div>
+
+        <div class="provider-key-row" data-provider="nvidia">
+          <div class="model-row provider-key-toggle-row">
+            <span class="model-label">NVIDIA — Inbuilt API Key</span>
+            <div class="model-select inbuilt-toggle" data-provider="nvidia">
+              <button type="button" data-value="on" class="active">On</button>
+              <button type="button" data-value="off">Off</button>
+            </div>
+          </div>
+          <div class="custom-key-field" data-provider="nvidia">
+            <label for="key-nvidia">Your API Key</label>
+            <div class="custom-key-input-row">
+              <input type="password" id="key-nvidia" autocomplete="off" placeholder="Paste your NVIDIA API key" />
+              <button type="button" class="save-key-btn" data-provider="nvidia">Save</button>
+            </div>
+            <p class="save-confirm" id="save-confirm-nvidia"></p>
+          </div>
+        </div>
+
+        <div class="provider-key-row" data-provider="groq">
+          <div class="model-row provider-key-toggle-row">
+            <span class="model-label">Groq — Inbuilt API Key</span>
+            <div class="model-select inbuilt-toggle" data-provider="groq">
+              <button type="button" data-value="on" class="active">On</button>
+              <button type="button" data-value="off">Off</button>
+            </div>
+          </div>
+          <div class="custom-key-field" data-provider="groq">
+            <label for="key-groq">Your API Key</label>
+            <div class="custom-key-input-row">
+              <input type="password" id="key-groq" autocomplete="off" placeholder="Paste your Groq API key" />
+              <button type="button" class="save-key-btn" data-provider="groq">Save</button>
+            </div>
+            <p class="save-confirm" id="save-confirm-groq"></p>
+          </div>
+        </div>
+
+        <div class="provider-key-row tavily-row">
+          <div class="model-row provider-key-toggle-row">
+            <span class="model-label">Tavily</span>
+            <span class="tavily-status">Always uses the app's configured key</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="settings-group">
+        <h3>Model names</h3>
+        <div class="field-row">
+          <label for="model-gemini">Gemini</label>
+          <input type="text" id="model-gemini" placeholder="gemini-2.5-flash" />
+        </div>
+        <div class="field-row">
+          <label for="model-nvidia">NVIDIA</label>
+          <input type="text" id="model-nvidia" placeholder="nvidia/nemotron-3-super-120b-a12b" />
+        </div>
+        <div class="field-row">
+          <label for="model-groq">Groq</label>
+          <input type="text" id="model-groq" placeholder="openai/gpt-oss-20b" />
+        </div>
+      </div>
+
+      <div class="settings-group">
+        <h3>Appearance</h3>
+        <div class="theme-toggle" id="theme-toggle">
+          <button type="button" data-theme="dark" class="active">Dark</button>
+          <button type="button" data-theme="light">Light</button>
+        </div>
+      </div>
+
+      <div class="settings-actions">
+        <button id="settings-close" type="button">Close</button>
+        <button id="settings-save" type="button">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
