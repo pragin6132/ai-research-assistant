@@ -2,7 +2,8 @@
     // directly (file://) or from a separate static server, hence an
     // absolute API base rather than a relative path. Matches the README's
     // `uvicorn main:app --reload` default.
-    const API_BASE = "http://127.0.0.1:8000";
+    const API_BASE =window.location.hostname === "127.0.0.1" ||
+      window.location.hostname === "localhost" ? "http://127.0.0.1:8000": "";
 
     const STEPS = [
       { stage: "plan", nodes: ["analyze", "plan"], label: "Plan" },
