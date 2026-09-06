@@ -1,0 +1,16 @@
+fastapi==0.115.0
+uvicorn[standard]==0.30.6
+pydantic==2.9.2
+pydantic-settings==2.5.2
+httpx==0.28.1  # HTTP client; also used by app/services/pixazo_service.py
+
+# LLM provider SDKs (used by app/services/llm_manager.py)
+google-generativeai==0.8.3
+openai==1.51.2
+groq==0.11.0
+
+# Web search provider SDK (used by app/services/tavily_service.py)
+tavily-python==0.8.0
+
+# Orchestration (used by app/graph/research_graph.py)
+langgraph==1.0.10
