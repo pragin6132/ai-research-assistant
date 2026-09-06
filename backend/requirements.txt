@@ -2,7 +2,7 @@ fastapi==0.115.0
 uvicorn[standard]==0.30.6
 pydantic==2.9.2
 pydantic-settings==2.5.2
-httpx==0.28.1  # HTTP client; also used by app/services/pixazo_service.py
+httpx==0.27.2  # HTTP client; also used by app/services/pixazo_service.py
 
 # LLM provider SDKs (used by app/services/llm_manager.py)
 google-generativeai==0.8.3
